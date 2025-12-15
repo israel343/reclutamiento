@@ -75,11 +75,9 @@ public class CustomerServiceImpl implements CustomerService {
 
         List<Object[]> resultList = repo.getCustomerMetrics();
 
-        if (resultList.isEmpty()) {
-            return new MetricsResponse(0.0, 0.0, 0L);
-        }
-
-        Object[] row = resultList.getFirst();
+        Object[] row = resultList.stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No hay datos para métricas"));
 
         double averageAge = row[0] != null
                 ? ((Number) row[0]).doubleValue()
